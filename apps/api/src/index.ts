@@ -5,6 +5,8 @@ import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
 import { ValidationError } from "@/lib/errors";
 
+import level from "@/modules/level/level.routes";
+
 const app = new Hono();
 
 app.use("*", logger());
@@ -64,6 +66,8 @@ app.get("/", (c) => {
     ping: "pong",
   });
 });
+
+app.route("/level", level);
 
 export default {
   fetch: app.fetch,
