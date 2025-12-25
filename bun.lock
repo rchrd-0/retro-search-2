@@ -4,9 +4,6 @@
   "workspaces": {
     "": {
       "name": "retro-search-2",
-      "dependencies": {
-        "valibot": "^1.2.0",
-      },
       "devDependencies": {
         "@biomejs/biome": "2.3.10",
         "@types/bun": "latest",
@@ -21,14 +18,22 @@
         "@hono/standard-validator": "^0.2.1",
         "@prisma/adapter-libsql": "^7.2.0",
         "@prisma/client": "^7.2.0",
+        "@retro-search-2/shared": "workspace:*",
         "@standard-schema/spec": "^1.1.0",
         "@t3-oss/env-core": "^0.13.10",
         "hono": "^4.11.1",
+        "valibot": "^1.2.0",
       },
       "devDependencies": {
         "@biomejs/biome": "2.3.10",
         "@types/bun": "latest",
         "prisma": "^7.2.0",
+      },
+    },
+    "packages/shared": {
+      "name": "@retro-search-2/shared",
+      "dependencies": {
+        "valibot": "^1.2.0",
       },
     },
   },
@@ -124,6 +129,8 @@
     "@prisma/studio-core": ["@prisma/studio-core@0.9.0", "", { "peerDependencies": { "@types/react": "^18.0.0 || ^19.0.0", "react": "^18.0.0 || ^19.0.0", "react-dom": "^18.0.0 || ^19.0.0" } }, "sha512-xA2zoR/ADu/NCSQuriBKTh6Ps4XjU0bErkEcgMfnSGh346K1VI7iWKnoq1l2DoxUqiddPHIEWwtxJ6xCHG6W7g=="],
 
     "@retro-search-2/api": ["@retro-search-2/api@workspace:apps/api"],
+
+    "@retro-search-2/shared": ["@retro-search-2/shared@workspace:packages/shared"],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 

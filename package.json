@@ -1,11 +1,11 @@
 {
   "name": "retro-search-2",
-  "type": "module",
-  "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ],
+  "scripts": {
+    "check": "bun --elide-lines=0 --filter '*' check",
+    "check:fix": "bun --elide-lines=0 --filter '*' check:fix",
+    "lint": "bun --elide-lines=0 --filter '*' lint",
+    "format": "bun --elide-lines=0 --filter '*' format"
+  },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
     "@types/bun": "latest"
@@ -13,7 +13,10 @@
   "peerDependencies": {
     "typescript": "^5"
   },
-  "dependencies": {
-    "valibot": "^1.2.0"
-  }
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
 }
