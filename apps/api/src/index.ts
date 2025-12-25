@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { serveStatic } from "hono/bun";
 import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
@@ -9,6 +10,8 @@ const app = new Hono();
 app.use("*", logger());
 
 app.use("*", cors());
+
+app.use("/public/*", serveStatic({ root: "./" }));
 
 app.onError((err, c) => {
   if (err instanceof ValidationError) {
@@ -35,7 +38,7 @@ app.onError((err, c) => {
     );
   }
 
-  console.error("Unhandled error");
+  console.error("Unhandled error:", err);
   return c.json(
     {
       success: false,
