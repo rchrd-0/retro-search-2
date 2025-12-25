@@ -11,8 +11,10 @@
     "format": "biome format --write src"
   },
   "dependencies": {
+    "@hono/standard-validator": "^0.2.1",
     "@prisma/adapter-libsql": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@standard-schema/spec": "^1.1.0",
     "@t3-oss/env-core": "^0.13.10",
     "hono": "^4.11.1"
   },
