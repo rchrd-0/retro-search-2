@@ -18,6 +18,7 @@ const routes = {
   postVerifyTarget: async (levelId: string, payload: VerifyTarget) => {
     try {
       const validated = parse(VerifyTargetSchema, payload);
+
       return await apiClient
         .post(`level/${levelId}/verify`, { json: validated })
         .json<{ success: boolean; message: string }>();
