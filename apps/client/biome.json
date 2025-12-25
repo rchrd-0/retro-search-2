@@ -1,0 +1,70 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+  "extends": "//",
+  "formatter": {
+    "attributePosition": "auto",
+    "bracketSpacing": true
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "domains": {
+      "react": "recommended"
+    },
+    "rules": {
+      "a11y": {
+        "noStaticElementInteractions": "off",
+        "useKeyWithClickEvents": "off"
+      },
+      "correctness": {
+        "noUnusedImports": {
+          "level": "warn",
+          "fix": "unsafe"
+        },
+        "noUnusedVariables": {
+          "level": "warn"
+        },
+        "useHookAtTopLevel": {
+          "level": "warn"
+        }
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "fix": "safe",
+          "options": {
+            "attributes": ["className", "*.ClassName"],
+            "functions": ["cn", "clsx", "cva"]
+          }
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/src/components/ui/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useImportType": "off",
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/src/integrations/**/root-provider.tsx"],
+      "linter": {
+        "rules": {
+          "nursery": {},
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    }
+  ]
+}
