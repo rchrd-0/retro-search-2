@@ -13,6 +13,7 @@
   "dependencies": {
     "@prisma/adapter-libsql": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@t3-oss/env-core": "^0.13.10",
     "hono": "^4.11.1"
   },
   "devDependencies": {
