@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Level {
+  id       String @id @default(nanoid())
+  name     String
+  imageUrl String @map("image_url")
+
+  characters Character[]
+  scores     Score[]
+}
+
+model Character {
+  id       String @id @default(nanoid())
+  levelId  String @map("level_id")
+  name     String
+  imageUrl String @map("image_url")
+  xPct     Float  @map("x_pct")
+  yPct     Float  @map("y_pct")
+
+  level Level @relation(fields: [levelId], references: [id])
+
+  @@index([levelId])
+  @@map("characters")
+}
+
+model Score {
+  id        String   @id @default(nanoid())
+  levelId   String   @map("level_id")
+  username  String
+  scoreMs   Int      @map("score_ms")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  level Level @relation(fields: [levelId], references: [id])
+
+  @@index([levelId, scoreMs])
+  @@index([createdAt])
+  @@map("scores")
+}

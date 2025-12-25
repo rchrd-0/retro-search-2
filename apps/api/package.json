@@ -1,13 +1,23 @@
 {
   "name": "@retro-search-2/api",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "db:generate": "bun --bun prisma generate",
+    "db:migrate": "bun --bun prisma migrate dev",
+    "db:seed": "bun run prisma/seed.ts",
+    "db:reset": "bun --bun prisma migrate reset",
+    "check": "biome check src && tsc",
+    "check:fix": "biome check --write src && tsc",
+    "format": "biome format --write src"
   },
   "dependencies": {
+    "@prisma/adapter-libsql": "^7.2.0",
+    "@prisma/client": "^7.2.0",
     "hono": "^4.11.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "prisma": "^7.2.0"
   }
 }
