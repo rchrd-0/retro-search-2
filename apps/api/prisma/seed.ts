@@ -212,54 +212,82 @@ async function main() {
     },
   });
 
-  const levels = await prisma.level.findMany();
+  const levels = await prisma.level.findMany({ orderBy: { name: "asc" } });
+  const [dreamcast, n64, ps1, ps2, snes] = levels;
 
-  for (const level of levels) {
-    await prisma.score.createMany({
-      data: [
-        {
-          levelId: level.id,
-          username: "ACE",
-          scoreMs: 45230,
-        },
-        {
-          levelId: level.id,
-          username: "MAX",
-          scoreMs: 52100,
-        },
-        {
-          levelId: level.id,
-          username: "PIX",
-          scoreMs: 38750,
-        },
-        {
-          levelId: level.id,
-          username: "NOX",
-          scoreMs: 61500,
-        },
-        {
-          levelId: level.id,
-          username: "RAY",
-          scoreMs: 47890,
-        },
-        {
-          levelId: level.id,
-          username: "ZEN",
-          scoreMs: 55340,
-        },
-        {
-          levelId: level.id,
-          username: "JOE",
-          scoreMs: 43120,
-        },
-        {
-          levelId: level.id,
-          username: "KAI",
-          scoreMs: 49870,
-        },
-      ],
-    });
+  if (!dreamcast || !n64 || !ps1 || !ps2 || !snes) {
+    throw new Error("Not all levels were created");
   }
+
+  // Dreamcast scores
+  await prisma.score.createMany({
+    data: [
+      { levelId: dreamcast.id, username: "ACE", scoreMs: 42130 },
+      { levelId: dreamcast.id, username: "ZRO", scoreMs: 45890 },
+      { levelId: dreamcast.id, username: "BLU", scoreMs: 48250 },
+      { levelId: dreamcast.id, username: "SKY", scoreMs: 51700 },
+      { levelId: dreamcast.id, username: "FOX", scoreMs: 54320 },
+      { levelId: dreamcast.id, username: "JET", scoreMs: 58900 },
+      { levelId: dreamcast.id, username: "NEO", scoreMs: 62140 },
+      { levelId: dreamcast.id, username: "VEX", scoreMs: 67580 },
+    ],
+  });
+
+  // Nintendo 64 scores
+  await prisma.score.createMany({
+    data: [
+      { levelId: n64.id, username: "MAX", scoreMs: 38450 },
+      { levelId: n64.id, username: "KAI", scoreMs: 41200 },
+      { levelId: n64.id, username: "RYU", scoreMs: 44890 },
+      { levelId: n64.id, username: "LEX", scoreMs: 48320 },
+      { levelId: n64.id, username: "ZEN", scoreMs: 52670 },
+      { levelId: n64.id, username: "RAY", scoreMs: 56240 },
+      { levelId: n64.id, username: "DEN", scoreMs: 59800 },
+      { levelId: n64.id, username: "ROX", scoreMs: 64150 },
+    ],
+  });
+
+  // PlayStation 1 scores
+  await prisma.score.createMany({
+    data: [
+      { levelId: ps1.id, username: "PIX", scoreMs: 36780 },
+      { levelId: ps1.id, username: "NOX", scoreMs: 40150 },
+      { levelId: ps1.id, username: "JAX", scoreMs: 43920 },
+      { levelId: ps1.id, username: "LUX", scoreMs: 47560 },
+      { levelId: ps1.id, username: "REX", scoreMs: 51230 },
+      { levelId: ps1.id, username: "MEG", scoreMs: 54890 },
+      { levelId: ps1.id, username: "VIK", scoreMs: 58470 },
+      { levelId: ps1.id, username: "AXL", scoreMs: 62900 },
+    ],
+  });
+
+  // PlayStation 2 scores
+  await prisma.score.createMany({
+    data: [
+      { levelId: ps2.id, username: "JOE", scoreMs: 39560 },
+      { levelId: ps2.id, username: "SAM", scoreMs: 42890 },
+      { levelId: ps2.id, username: "IVY", scoreMs: 46320 },
+      { levelId: ps2.id, username: "TEX", scoreMs: 50100 },
+      { levelId: ps2.id, username: "MAV", scoreMs: 53780 },
+      { levelId: ps2.id, username: "ZAK", scoreMs: 57420 },
+      { levelId: ps2.id, username: "PHX", scoreMs: 61050 },
+      { levelId: ps2.id, username: "CYN", scoreMs: 65890 },
+    ],
+  });
+
+  // SNES scores
+  await prisma.score.createMany({
+    data: [
+      { levelId: snes.id, username: "ASH", scoreMs: 41230 },
+      { levelId: snes.id, username: "BEX", scoreMs: 44670 },
+      { levelId: snes.id, username: "GUS", scoreMs: 48100 },
+      { levelId: snes.id, username: "OWL", scoreMs: 52490 },
+      { levelId: snes.id, username: "NYX", scoreMs: 55820 },
+      { levelId: snes.id, username: "TAO", scoreMs: 59340 },
+      { levelId: snes.id, username: "KIP", scoreMs: 63100 },
+      { levelId: snes.id, username: "DOC", scoreMs: 68750 },
+    ],
+  });
 
   console.log("✅ Seed completed!");
 }
