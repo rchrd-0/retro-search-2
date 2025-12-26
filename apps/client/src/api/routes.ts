@@ -1,5 +1,8 @@
 import {
+  type LeaderboardEntry,
+  LeaderboardSchema,
   type Level,
+  type Score,
   type StartGameResponse,
   type VerifyTarget,
   VerifyTargetSchema,
@@ -26,6 +29,20 @@ const routes = {
       return await apiClient
         .post(`level/${levelId}/verify`, { json: validated })
         .json<{ success: boolean; message: string }>();
+    } catch (error) {
+      handleValidationError(error);
+    }
+  },
+  getLeaderboard: async (levelId: string) => {
+    return await apiClient.get(`level/${levelId}/leaderboard`).json<Score[]>();
+  },
+  postSubmitScore: async (levelId: string, payload: LeaderboardEntry) => {
+    try {
+      const validated = parse(LeaderboardSchema, payload);
+
+      return await apiClient
+        .post(`level/${levelId}/leaderboard`, { json: validated })
+        .json<Score>();
     } catch (error) {
       handleValidationError(error);
     }

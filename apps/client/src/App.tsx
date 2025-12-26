@@ -1,5 +1,6 @@
 import { useReducer } from "react";
 import Game from "@/components/Game";
+import LeaderboardPage from "@/components/LeaderboardPage";
 import LevelSelect from "@/components/LevelSelect";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,7 @@ function App() {
   const resetToMainMenu = () => setPageState({ type: "RESET" });
 
   const startGame = (levelId: string) => setPageState({ type: "START_GAME", levelId });
+  const viewLeaderboard = () => setPageState({ type: "VIEW_LEADERBOARD" });
 
   return (
     <Layout>
@@ -47,9 +49,22 @@ function App() {
         </Button>
       )}
 
-      {currentView === "select" && <LevelSelect handleSelectLevel={startGame} />}
+      {currentView === "select" && (
+        <>
+          <div className="mb-8 flex justify-center">
+            <Button size="lg" onClick={viewLeaderboard}>
+              View Leaderboards
+            </Button>
+          </div>
+          <LevelSelect handleSelectLevel={startGame} />
+        </>
+      )}
 
-      {currentView === "game" && selectedLevel && <Game levelId={selectedLevel} />}
+      {currentView === "game" && selectedLevel && (
+        <Game levelId={selectedLevel} onViewLeaderboard={viewLeaderboard} />
+      )}
+
+      {currentView === "leaderboard" && <LeaderboardPage />}
     </Layout>
   );
 }

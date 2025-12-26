@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import CharacterSelectMenu from "@/components/CharacterSelectMenu";
 import Marker from "@/components/Marker";
+import SubmitScore from "@/components/SubmitScore";
 import Timer from "@/components/Timer";
 import { Spinner } from "@/components/ui/spinner";
 import { useAspectRatio } from "@/hooks/game/useAspectRatio";
@@ -11,9 +13,11 @@ import { useVerifyCharacter } from "@/hooks/query/useVerifyCharacter";
 
 interface GameProps {
   levelId: string;
+  onViewLeaderboard?: () => void;
 }
 
-const Game = ({ levelId }: GameProps) => {
+const Game = ({ levelId, onViewLeaderboard }: GameProps) => {
+  const [isSubmitScoreOpen, setIsSubmitScoreOpen] = useState(false);
   const { clickState, handleClick, resetClickState } = useClickState();
 
   const { mutate: verifyCharacter } = useVerifyCharacter(levelId);
@@ -21,8 +25,16 @@ const Game = ({ levelId }: GameProps) => {
   const { level } = data || {};
   const aspectRatio = useAspectRatio(level?.imageUrl);
   const imageLoaded = aspectRatio !== null;
-  const { foundCharacters, foundMarkers, markCharacterFound, elapsedMs, isVictory, isRunning } =
-    useGame(level, imageLoaded);
+  const { foundCharacters, foundMarkers, markCharacterFound, elapsedMs, isVictory } = useGame(
+    level,
+    imageLoaded,
+  );
+
+  useEffect(() => {
+    if (isVictory) {
+      setIsSubmitScoreOpen(true);
+    }
+  }, [isVictory]);
 
   const characterList =
     level?.characters.map((character) => ({
@@ -60,30 +72,36 @@ const Game = ({ levelId }: GameProps) => {
   if (isLoading) return <Spinner />;
 
   return (
-    <>
-      <div className="relative">
-        <Timer elapsedMs={elapsedMs} />
+    <div className="relative">
+      <Timer elapsedMs={elapsedMs} />
 
-        <div
-          className="w-full cursor-crosshair bg-center bg-cover"
-          style={{ backgroundImage: `url(${level?.imageUrl})`, aspectRatio: aspectRatio ?? "auto" }}
-          onClick={handleClick}
+      <div
+        className="w-full cursor-crosshair bg-center bg-cover"
+        style={{ backgroundImage: `url(${level?.imageUrl})`, aspectRatio: aspectRatio ?? "auto" }}
+        onClick={handleClick}
+      />
+
+      <CharacterSelectMenu
+        clickState={clickState}
+        closeMenu={resetClickState}
+        handleCharacterSelect={handleCharacterSelect}
+        characterList={characterList}
+      />
+
+      {isVictory && (
+        <SubmitScore
+          levelId={levelId}
+          scoreMs={elapsedMs}
+          isOpen={isSubmitScoreOpen}
+          onClose={() => setIsSubmitScoreOpen(false)}
+          onViewLeaderboard={onViewLeaderboard}
         />
+      )}
 
-        <CharacterSelectMenu
-          clickState={clickState}
-          closeMenu={resetClickState}
-          handleCharacterSelect={handleCharacterSelect}
-          characterList={characterList}
-        />
-
-        {isVictory && <div>Victory!</div>}
-
-        {foundMarkers.map(({ characterId, x, y }) => (
-          <Marker key={characterId} x={x} y={y} />
-        ))}
-      </div>
-    </>
+      {foundMarkers.map(({ characterId, x, y }) => (
+        <Marker key={characterId} x={x} y={y} />
+      ))}
+    </div>
   );
 };
 

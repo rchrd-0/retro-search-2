@@ -11,6 +11,8 @@
     "preview": "bunx --bun vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@retro-search-2/shared": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
