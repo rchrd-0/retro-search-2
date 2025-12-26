@@ -3,8 +3,8 @@ import { serveStatic } from "hono/bun";
 import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
+import env from "@/env";
 import { ValidationError } from "@/lib/errors";
-
 import level from "@/modules/level/level.routes";
 
 const app = new Hono();
@@ -70,5 +70,6 @@ app.get("/", (c) => {
 app.route("/level", level);
 
 export default {
+  port: env.PORT,
   fetch: app.fetch,
 };

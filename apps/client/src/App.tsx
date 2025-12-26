@@ -1,4 +1,5 @@
 import { useReducer } from "react";
+import Game from "@/components/Game";
 import LevelSelect from "@/components/LevelSelect";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,8 @@ function App() {
       )}
 
       {currentView === "select" && <LevelSelect handleSelectLevel={startGame} />}
+
+      {currentView === "game" && selectedLevel && <Game levelId={selectedLevel} />}
     </Layout>
   );
 }

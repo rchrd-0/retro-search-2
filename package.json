@@ -1,6 +1,7 @@
 {
   "name": "retro-search-2",
   "scripts": {
+    "dev": "bun --elide-lines=0 --filter '*' dev",
     "check": "bun --elide-lines=0 --filter '*' check",
     "check:fix": "bun --elide-lines=0 --filter '*' check:fix",
     "lint": "bun --elide-lines=0 --filter '*' lint",

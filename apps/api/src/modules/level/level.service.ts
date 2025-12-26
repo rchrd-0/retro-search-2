@@ -12,7 +12,7 @@ export const startGame = async (levelId: string) => {
 
   if (!level) throw new HTTPException(404, { message: "Level not found" });
 
-  return { level };
+  return level;
 };
 
 export const verifyTarget = async (levelId: string, characterId: string, x: number, y: number) => {
