@@ -2,6 +2,8 @@ import { HTTPException } from "hono/http-exception";
 import * as sessionRepo from "./session.repository";
 
 export const createSession = async (levelId: string) => {
+  sessionRepo.deleteExpired().catch((err) => console.error("Cleanup failed", err));
+
   return await sessionRepo.create(levelId);
 };
 
@@ -39,5 +41,9 @@ export const finishSession = async (id: string) => {
   const session = await getSession(id);
   const timeMs = Date.now() - session.createdAt.getTime();
 
-  return await sessionRepo.complete(id, timeMs);
+  const completedSession = await sessionRepo.complete(id, timeMs);
+
+  sessionRepo.deleteExpired().catch((err) => console.error("Cleanup failed", err));
+
+  return completedSession;
 };
