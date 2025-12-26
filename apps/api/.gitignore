@@ -3,4 +3,10 @@ node_modules/
 
 /generated/prisma
 
+# Environment files
+.env
+.env.local
+
+# Database files
 dev.db
+prod.db

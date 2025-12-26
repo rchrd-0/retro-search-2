@@ -6,6 +6,7 @@
     "db:migrate": "bun --bun prisma migrate dev",
     "db:seed": "bun run prisma/seed.ts",
     "db:reset": "bun --bun prisma migrate reset",
+    "db:studio": "bun --bun prisma studio",
     "check": "biome check src",
     "check:fix": "biome check --write src",
     "format": "biome format --write src"

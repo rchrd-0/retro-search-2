@@ -11,7 +11,15 @@ const app = new Hono();
 
 app.use("*", logger());
 
-app.use("*", cors());
+app.use(
+  "*",
+  cors({
+    origin: env.FRONTEND_URL,
+    allowMethods: ["GET", "POST"],
+    allowHeaders: ["Content-Type", "Authorization", "X-SESSION-ID"],
+    credentials: true,
+  }),
+);
 
 app.use("/public/*", serveStatic({ root: "./" }));
 
