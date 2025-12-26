@@ -1,10 +1,11 @@
 import { toast } from "sonner";
 import CharacterSelectMenu from "@/components/CharacterSelectMenu";
 import Marker from "@/components/Marker";
+import Timer from "@/components/Timer";
 import { Spinner } from "@/components/ui/spinner";
 import { useAspectRatio } from "@/hooks/game/useAspectRatio";
 import { useClickState } from "@/hooks/game/useClickState";
-import { useFoundState } from "@/hooks/game/useFoundState";
+import { useGame } from "@/hooks/game/useGame";
 import { useGetLevel } from "@/hooks/query/useGetLevel";
 import { useVerifyCharacter } from "@/hooks/query/useVerifyCharacter";
 
@@ -14,12 +15,14 @@ interface GameProps {
 
 const Game = ({ levelId }: GameProps) => {
   const { clickState, handleClick, resetClickState } = useClickState();
-  const { foundCharacters, foundMarkers, markCharacterFound } = useFoundState();
 
   const { mutate: verifyCharacter } = useVerifyCharacter(levelId);
   const { data, isLoading } = useGetLevel(levelId);
   const { level } = data || {};
   const aspectRatio = useAspectRatio(level?.imageUrl);
+  const imageLoaded = aspectRatio !== null;
+  const { foundCharacters, foundMarkers, markCharacterFound, elapsedMs, isVictory, isRunning } =
+    useGame(level, imageLoaded);
 
   const characterList =
     level?.characters.map((character) => ({
@@ -57,24 +60,30 @@ const Game = ({ levelId }: GameProps) => {
   if (isLoading) return <Spinner />;
 
   return (
-    <div className="relative">
-      <div
-        className="w-full cursor-crosshair bg-center bg-cover"
-        style={{ backgroundImage: `url(${level?.imageUrl})`, aspectRatio: aspectRatio ?? "auto" }}
-        onClick={handleClick}
-      />
+    <>
+      <div className="relative">
+        <Timer elapsedMs={elapsedMs} />
 
-      <CharacterSelectMenu
-        clickState={clickState}
-        closeMenu={resetClickState}
-        handleCharacterSelect={handleCharacterSelect}
-        characterList={characterList}
-      />
+        <div
+          className="w-full cursor-crosshair bg-center bg-cover"
+          style={{ backgroundImage: `url(${level?.imageUrl})`, aspectRatio: aspectRatio ?? "auto" }}
+          onClick={handleClick}
+        />
 
-      {foundMarkers.map(({ characterId, x, y }) => (
-        <Marker key={characterId} x={x} y={y} />
-      ))}
-    </div>
+        <CharacterSelectMenu
+          clickState={clickState}
+          closeMenu={resetClickState}
+          handleCharacterSelect={handleCharacterSelect}
+          characterList={characterList}
+        />
+
+        {isVictory && <div>Victory!</div>}
+
+        {foundMarkers.map(({ characterId, x, y }) => (
+          <Marker key={characterId} x={x} y={y} />
+        ))}
+      </div>
+    </>
   );
 };
 
