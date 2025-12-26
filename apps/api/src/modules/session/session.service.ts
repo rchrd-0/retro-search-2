@@ -11,7 +11,7 @@ export const getSession = async (id: string, levelId?: string) => {
     : await sessionRepo.findById(id);
 
   if (!session) {
-    throw new HTTPException(404, { message: "Invalid session" });
+    throw new HTTPException(401, { message: "Invalid session" });
   }
 
   return session;
@@ -21,15 +21,15 @@ export const getPlayableSession = async (sessionId: string, levelId: string) => 
   const session = await sessionRepo.findById(sessionId);
 
   if (!session || session.levelId !== levelId) {
-    throw new HTTPException(400, { message: "Invalid session" });
+    throw new HTTPException(401, { message: "Invalid session" });
   }
 
   if (session.used) {
-    throw new HTTPException(400, { message: "Session already finished" });
+    throw new HTTPException(401, { message: "Session already finished" });
   }
 
   if (Date.now() > session.expiresAt.getTime()) {
-    throw new HTTPException(400, { message: "Session expired" });
+    throw new HTTPException(401, { message: "Session expired" });
   }
 
   return session;

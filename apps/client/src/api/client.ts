@@ -8,22 +8,35 @@ export const apiClient = ky.create({
     "Content-Type": "application/json",
   },
   hooks: {
+    beforeRequest: [
+      (request) => {
+        const sessionId = sessionStorage.getItem("rs:session_id");
+
+        if (sessionId) {
+          request.headers.set("X-SESSION-ID", sessionId);
+        }
+      },
+    ],
     afterResponse: [
       async (_request, _options, response) => {
-        const res = await response.json<ApiResponse<unknown>>();
-
-        if (!res.success) {
-          throw new Error(res.message);
+        if (response.status === 401) {
+          sessionStorage.removeItem("rs:session_id");
         }
 
-        if (res.data !== undefined) {
-          return new Response(JSON.stringify(res.data), {
+        const parsedBody = await response.json<ApiResponse<unknown>>();
+
+        if (!response.ok || !parsedBody.success) {
+          throw new Error(parsedBody.message || "An unknown error occurred");
+        }
+
+        if (parsedBody.data !== undefined) {
+          return new Response(JSON.stringify(parsedBody.data), {
             status: response.status,
             headers: response.headers,
           });
         }
 
-        const { ...body } = res;
+        const { ...body } = parsedBody;
 
         return new Response(JSON.stringify(body), {
           status: response.status,

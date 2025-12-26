@@ -13,7 +13,11 @@ const routes = {
     return await apiClient.get("level").json<Level[]>();
   },
   getLevelById: async (levelId: string) => {
-    return await apiClient.get(`level/${levelId}`).json<StartGameResponse>();
+    const response = await apiClient.get(`level/${levelId}`).json<StartGameResponse>();
+
+    sessionStorage.setItem("rs:session_id", response.sessionId);
+
+    return response;
   },
   postVerifyTarget: async (levelId: string, payload: VerifyTarget) => {
     try {
