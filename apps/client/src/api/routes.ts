@@ -1,6 +1,6 @@
 import {
   type Level,
-  type LevelWithCharacters,
+  type StartGameResponse,
   type VerifyTarget,
   VerifyTargetSchema,
 } from "@retro-search-2/shared";
@@ -13,7 +13,7 @@ const routes = {
     return await apiClient.get("level").json<Level[]>();
   },
   getLevelById: async (levelId: string) => {
-    return await apiClient.get(`level/${levelId}`).json<LevelWithCharacters>();
+    return await apiClient.get(`level/${levelId}`).json<StartGameResponse>();
   },
   postVerifyTarget: async (levelId: string, payload: VerifyTarget) => {
     try {

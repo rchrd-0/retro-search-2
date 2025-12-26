@@ -1,4 +1,4 @@
-import type { Level, LevelWithCharacters } from "@retro-search-2/shared";
+import type { Level, PublicLevel } from "@retro-search-2/shared";
 import type { Prisma } from "generated/prisma/client";
 import prisma from "@/db";
 
@@ -16,7 +16,7 @@ export const findAll = (): Promise<Level[]> => {
   });
 };
 
-export const findByIdWithCharacters = (id: string): Promise<LevelWithCharacters | null> => {
+export const findByIdWithCharacters = (id: string): Promise<PublicLevel | null> => {
   return prisma.level.findUnique({
     where: { id },
     select: {
@@ -38,5 +38,29 @@ export const findCharacterById = (id: string): Promise<CharacterWithSecrets | nu
       xPct: true,
       yPct: true,
     },
+  });
+};
+
+export const findFoundCharacter = (sessionId: string, characterId: string) => {
+  return prisma.foundCharacter.findFirst({
+    where: { sessionId, characterId },
+  });
+};
+
+export const markCharacterAsFound = (sessionId: string, characterId: string) => {
+  return prisma.foundCharacter.create({
+    data: { sessionId, characterId },
+  });
+};
+
+export const countCharactersInLevel = (levelId: string): Promise<number> => {
+  return prisma.character.count({
+    where: { levelId },
+  });
+};
+
+export const countFoundCharactersInSession = (sessionId: string): Promise<number> => {
+  return prisma.foundCharacter.count({
+    where: { sessionId },
   });
 };

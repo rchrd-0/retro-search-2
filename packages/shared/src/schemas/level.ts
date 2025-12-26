@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-const IdSchema = v.pipe(v.string(), v.nanoid(), v.length(21));
+export const IdSchema = v.pipe(v.string(), v.nanoid(), v.length(21));
 
 export const LevelIdSchema = v.object({
   levelId: IdSchema,
@@ -32,16 +32,22 @@ export const CharacterSchema = v.object({
   imageUrl: v.string(),
 });
 
-export const LevelWithCharactersSchema = v.intersect([
-  LevelSchema,
-  v.object({
-    characters: v.array(CharacterSchema),
-  }),
-]);
+export const PublicLevelSchema = v.object({
+  id: IdSchema,
+  name: v.string(),
+  imageUrl: v.string(),
+  characters: v.array(CharacterSchema),
+});
+
+export const StartGameResponseSchema = v.object({
+  level: PublicLevelSchema,
+  sessionId: IdSchema,
+});
 
 export type Level = v.InferOutput<typeof LevelSchema>;
 export type Character = v.InferOutput<typeof CharacterSchema>;
-export type LevelWithCharacters = v.InferOutput<typeof LevelWithCharactersSchema>;
+export type PublicLevel = v.InferOutput<typeof PublicLevelSchema>;
+export type StartGameResponse = v.InferOutput<typeof StartGameResponseSchema>;
 
 export const ScoreSchema = v.object({
   levelId: IdSchema,

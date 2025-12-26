@@ -8,10 +8,10 @@ export const useGetLevel = (levelId: string) => {
     queryFn: async () => await api.getLevelById(levelId),
     select: (data) => {
       const level = {
-        ...data,
-        imageUrl: getImageUrl(data.imageUrl),
+        ...data.level,
+        imageUrl: getImageUrl(data.level.imageUrl),
 
-        characters: data.characters.map((character) => ({
+        characters: data.level.characters.map((character) => ({
           ...character,
           imageUrl: getImageUrl(character.imageUrl),
         })),

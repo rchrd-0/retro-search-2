@@ -14,6 +14,9 @@ model Level {
 
   characters Character[]
   scores     Score[]
+  sessions   Session[]
+
+  @@map("levels")
 }
 
 model Character {
@@ -24,7 +27,8 @@ model Character {
   xPct     Float  @map("x_pct")
   yPct     Float  @map("y_pct")
 
-  level Level @relation(fields: [levelId], references: [id])
+  level           Level            @relation(fields: [levelId], references: [id])
+  foundCharacters FoundCharacter[]
 
   @@index([levelId])
   @@map("characters")
@@ -42,4 +46,33 @@ model Score {
   @@index([levelId, scoreMs])
   @@index([createdAt])
   @@map("scores")
+}
+
+model Session {
+  id        String   @id @default(nanoid())
+  levelId   String   @map("level_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+
+  completedAt DateTime? @map("completed_at")
+  timeMs      Int?      @map("time_ms")
+
+  level           Level            @relation(fields: [levelId], references: [id])
+  foundCharacters FoundCharacter[]
+
+  @@map("sessions")
+}
+
+model FoundCharacter {
+  id          String   @id @default(nanoid())
+  sessionId   String   @map("session_id")
+  characterId String   @map("character_id")
+  foundAt     DateTime @default(now()) @map("found_at")
+
+  session   Session   @relation(fields: [sessionId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
+
+  @@unique([sessionId, characterId])
+  @@map("found_characters")
 }
