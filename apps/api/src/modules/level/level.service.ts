@@ -59,3 +59,25 @@ export const verifyTarget = async (
 
   return { name: character.name, found: isWithinRange };
 };
+
+export const getLeaderboard = async (levelId: string) => {
+  return await levelRepo.findScoresForLevel(levelId);
+};
+
+export const submitScore = async (sessionId: string, username: string) => {
+  const session = await sessionService.getSession(sessionId);
+
+  if (!session.timeMs) {
+    throw new HTTPException(400, { message: "Game session not finished" });
+  }
+
+  if (session.used) {
+    throw new HTTPException(409, { message: "Score already submitted" });
+  }
+
+  const score = levelRepo.createScore(session.levelId, username, session.timeMs);
+
+  await sessionService.markSessionAsUsed(sessionId);
+
+  return score;
+};

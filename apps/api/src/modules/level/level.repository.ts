@@ -64,3 +64,27 @@ export const countFoundCharactersInSession = (sessionId: string): Promise<number
     where: { sessionId },
   });
 };
+
+export const findScoresForLevel = (levelId: string) => {
+  return prisma.score.findMany({
+    where: { levelId },
+    orderBy: { scoreMs: "asc" },
+    take: 10,
+  });
+};
+
+export const createScore = (levelId: string, username: string, scoreMs: number) => {
+  return prisma.score.create({
+    data: {
+      levelId,
+      username,
+      scoreMs,
+    },
+    select: {
+      levelId: true,
+      username: true,
+      scoreMs: true,
+      createdAt: true,
+    },
+  });
+};

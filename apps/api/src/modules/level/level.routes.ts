@@ -1,4 +1,9 @@
-import { IdSchema, LevelIdSchema, VerifyTargetSchema } from "@retro-search-2/shared";
+import {
+  IdSchema,
+  LeaderboardSchema,
+  LevelIdSchema,
+  VerifyTargetSchema,
+} from "@retro-search-2/shared";
 import { Hono } from "hono";
 import * as v from "valibot";
 import { validate } from "@/lib/validator";
@@ -39,6 +44,28 @@ level.post(
       success: result.found,
       message: result.found ? `${result.name} found!` : "Incorrect location",
     });
+  },
+);
+
+level.get("/:levelId/leaderboard", validate("param", LevelIdSchema), async (c) => {
+  const { levelId } = c.req.valid("param");
+
+  const data = await levelService.getLeaderboard(levelId);
+
+  return c.json({ success: true, data });
+});
+
+level.post(
+  "/:levelId/leaderboard",
+  validate("header", v.object({ "x-session-id": IdSchema })),
+  validate("json", LeaderboardSchema),
+  async (c) => {
+    const { username } = c.req.valid("json");
+    const { "x-session-id": sessionId } = c.req.valid("header");
+
+    const score = await levelService.submitScore(sessionId, username);
+
+    return c.json({ success: true, data: score });
   },
 );
 

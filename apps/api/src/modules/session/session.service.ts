@@ -47,3 +47,7 @@ export const finishSession = async (id: string) => {
 
   return completedSession;
 };
+
+export const markSessionAsUsed = async (id: string) => {
+  return await sessionRepo.markAsUsed(id);
+};
