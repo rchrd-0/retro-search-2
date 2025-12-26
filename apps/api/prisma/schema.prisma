@@ -70,7 +70,7 @@ model FoundCharacter {
   characterId String   @map("character_id")
   foundAt     DateTime @default(now()) @map("found_at")
 
-  session   Session   @relation(fields: [sessionId], references: [id])
+  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   character Character @relation(fields: [characterId], references: [id])
 
   @@unique([sessionId, characterId])
