@@ -36,6 +36,7 @@ const LeaderboardPage = () => {
                 <Button
                   key={level.id}
                   variant={selectedLevelId === level.id ? "default" : "outline"}
+                  className={selectedLevelId === level.id ? "border border-transparent" : ""}
                   onClick={() => setSelectedLevelId(level.id)}
                 >
                   {level.name}

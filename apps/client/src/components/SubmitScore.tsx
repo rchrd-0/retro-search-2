@@ -20,6 +20,7 @@ interface SubmitScoreProps {
   isOpen: boolean;
   onClose: () => void;
   onViewLeaderboard?: () => void;
+  onBackToMenu?: () => void;
 }
 
 const SubmitScore = ({
@@ -28,6 +29,7 @@ const SubmitScore = ({
   isOpen,
   onClose,
   onViewLeaderboard,
+  onBackToMenu,
 }: SubmitScoreProps) => {
   const [username, setUsername] = useState("");
   const { mutate: submitScore, isPending } = useSubmitScore(levelId);
@@ -83,7 +85,7 @@ const SubmitScore = ({
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={() => onBackToMenu?.() ?? onClose()}>
               Skip
             </Button>
             <Button type="submit" disabled={isPending || username.length !== 3}>

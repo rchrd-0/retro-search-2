@@ -14,9 +14,10 @@ import { useVerifyCharacter } from "@/hooks/query/useVerifyCharacter";
 interface GameProps {
   levelId: string;
   onViewLeaderboard?: () => void;
+  onBackToMenu?: () => void;
 }
 
-const Game = ({ levelId, onViewLeaderboard }: GameProps) => {
+const Game = ({ levelId, onViewLeaderboard, onBackToMenu }: GameProps) => {
   const [isSubmitScoreOpen, setIsSubmitScoreOpen] = useState(false);
   const { clickState, handleClick, resetClickState } = useClickState();
 
@@ -35,6 +36,17 @@ const Game = ({ levelId, onViewLeaderboard }: GameProps) => {
       setIsSubmitScoreOpen(true);
     }
   }, [isVictory]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        resetClickState();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [resetClickState]);
 
   const characterList =
     level?.characters.map((character) => ({
@@ -95,6 +107,7 @@ const Game = ({ levelId, onViewLeaderboard }: GameProps) => {
           isOpen={isSubmitScoreOpen}
           onClose={() => setIsSubmitScoreOpen(false)}
           onViewLeaderboard={onViewLeaderboard}
+          onBackToMenu={onBackToMenu}
         />
       )}
 

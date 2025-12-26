@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import Game from "@/components/Game";
 import LeaderboardPage from "@/components/LeaderboardPage";
 import LevelSelect from "@/components/LevelSelect";
@@ -36,10 +36,44 @@ function App() {
     selectedLevel: null,
   });
 
-  const resetToMainMenu = () => setPageState({ type: "RESET" });
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state;
+      if (state?.view === "game" && state.levelId) {
+        setPageState({ type: "START_GAME", levelId: state.levelId });
+      } else if (state?.view === "leaderboard") {
+        setPageState({ type: "VIEW_LEADERBOARD" });
+      } else {
+        setPageState({ type: "RESET" });
+      }
+    };
 
-  const startGame = (levelId: string) => setPageState({ type: "START_GAME", levelId });
-  const viewLeaderboard = () => setPageState({ type: "VIEW_LEADERBOARD" });
+    window.addEventListener("popstate", handlePopState);
+
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const resetToMainMenu = () => {
+    setPageState({ type: "RESET" });
+
+    window.history.pushState({ view: "select" }, "");
+  };
+
+  const startGame = (levelId: string) => {
+    setPageState({ type: "START_GAME", levelId });
+
+    window.history.pushState({ view: "game", levelId }, "");
+  };
+
+  const viewLeaderboard = (replace = false) => {
+    setPageState({ type: "VIEW_LEADERBOARD" });
+
+    if (replace) {
+      window.history.replaceState({ view: "leaderboard" }, "");
+    } else {
+      window.history.pushState({ view: "leaderboard" }, "");
+    }
+  };
 
   return (
     <Layout>
@@ -52,7 +86,7 @@ function App() {
       {currentView === "select" && (
         <>
           <div className="mb-8 flex justify-center">
-            <Button size="lg" onClick={viewLeaderboard}>
+            <Button size="lg" onClick={() => viewLeaderboard()}>
               View Leaderboards
             </Button>
           </div>
@@ -61,7 +95,11 @@ function App() {
       )}
 
       {currentView === "game" && selectedLevel && (
-        <Game levelId={selectedLevel} onViewLeaderboard={viewLeaderboard} />
+        <Game
+          levelId={selectedLevel}
+          onViewLeaderboard={() => viewLeaderboard(true)}
+          onBackToMenu={resetToMainMenu}
+        />
       )}
 
       {currentView === "leaderboard" && <LeaderboardPage />}
