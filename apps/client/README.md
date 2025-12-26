@@ -1,75 +1,71 @@
-# React + TypeScript + Vite
+# @retro-search-2/client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend application for Retro Search 2, a hidden object game. Built with React, Vite, and TailwindCSS.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive Gameplay**: Pan and zoom to find hidden characters in detailed level images.
+- **Leaderboards**: Compete with other players for the fastest times.
+- **Responsive Design**: Works on various screen sizes.
+- **Optimistic UI**: Instant feedback for user actions.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **Framework**: [React](https://react.dev/) (with React Compiler)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Styling**: [TailwindCSS](https://tailwindcss.com/)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **State Management/Data Fetching**: [TanStack Query](https://tanstack.com/query/latest)
+- **HTTP Client**: [Ky](https://github.com/sindresorhus/ky)
+- **Validation**: [Valibot](https://valibot.dev/)
+- **Toast Notifications**: [Sonner](https://sonner.emilkowal.ski/)
 
-Note: This will impact Vite dev & build performances.
+## Scripts
 
-## Expanding the ESLint configuration
+Run these commands from the `apps/client` directory or via the root workspace scripts.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Start the development server:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+bun run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The app will be available at http://localhost:3000.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Build the application for production:
+
+```bash
+bun run build
+```
+
+### Linting & Formatting
+
+Check for linting and formatting issues:
+
+```bash
+bun run check
+```
+
+Fix auto-fixable issues:
+
+```bash
+bun run check:fix
+```
+
+Format code:
+
+```bash
+bun run format
+```
+
+### Preview
+
+Preview the production build locally:
+
+```bash
+bun run preview
 ```
