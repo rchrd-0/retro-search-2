@@ -4,9 +4,9 @@ import env from "@/env";
 export default defineConfig({
   schema: "./src/db/schema.ts",
   out: "./drizzle",
-  dialect: "sqlite",
+  dialect: env.NODE_ENV === "production" ? "turso" : "sqlite",
   dbCredentials: {
     url: env.DATABASE_URL,
-    ...(env.TURSO_AUTH_TOKEN ? { authToken: env.TURSO_AUTH_TOKEN } : {}),
+    authToken: env.TURSO_AUTH_TOKEN,
   },
 });
