@@ -8,7 +8,7 @@ A "Where's Waldo" style hidden object game built with a modern web stack. Player
 - **Monorepo**: Bun Workspaces
 - **Frontend**: React (with React Compiler), Vite, TailwindCSS, Shadcn UI, TanStack Query
 - **Backend**: Hono
-- **Database**: SQLite with Prisma ORM
+- **Database**: Turso (LibSQL) / SQLite with Drizzle ORM
 - **Validation**: Valibot
 - **Linting/Formatting**: Biome
 
