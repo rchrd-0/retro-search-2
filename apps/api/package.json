@@ -2,29 +2,30 @@
   "name": "@retro-search-2/api",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "db:generate": "bunx prisma generate",
-    "db:migrate": "bunx prisma migrate dev",
-    "db:deploy": "bunx prisma migrate deploy",
-    "db:seed": "bun run prisma/seed.ts",
-    "db:reset": "bunx prisma migrate reset",
-    "db:studio": "bunx prisma studio",
+    "db:generate": "bun --bun drizzle-kit generate",
+    "db:migrate": "bun --bun drizzle-kit migrate",
+    "db:seed": "bun run src/db/seeds/index.ts",
+    "db:reset": "bun run src/db/reset.ts && bun run db:migrate && bun run db:seed",
+    "db:studio": "bun --bun drizzle-kit studio",
     "check": "biome check src",
     "check:fix": "biome check --write src",
     "format": "biome format --write src"
   },
   "dependencies": {
     "@hono/standard-validator": "^0.2.1",
-    "@prisma/adapter-libsql": "^7.2.0",
-    "@prisma/client": "^7.2.0",
+    "@libsql/client": "^0.15.15",
+    "@retro-search-2/shared": "workspace:*",
     "@standard-schema/spec": "^1.1.0",
     "@t3-oss/env-core": "^0.13.10",
+    "drizzle-orm": "^0.45.1",
     "hono": "^4.11.1",
-    "valibot": "^1.2.0",
-    "@retro-search-2/shared": "workspace:*"
+    "nanoid": "^5.1.6",
+    "valibot": "^1.2.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
     "@types/bun": "latest",
-    "prisma": "^7.2.0"
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.21.0"
   }
 }
