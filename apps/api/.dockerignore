@@ -1,0 +1,11 @@
+# flyctl launch added from .gitignore
+# deps
+**/node_modules
+
+# Environment files
+**/.env
+**/.env.local
+
+# Database files
+**/dev.db
+fly.toml

@@ -7,7 +7,6 @@ const env = createEnv({
     DATABASE_URL: v.fallback(v.string(), "file:./dev.db"),
     TURSO_AUTH_TOKEN: v.optional(v.string()),
     FRONTEND_URL: v.string(),
-    NODE_ENV: v.fallback(v.string(), "development"),
   },
   runtimeEnv: Bun.env,
   emptyStringAsUndefined: true,
