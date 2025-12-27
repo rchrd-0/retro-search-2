@@ -1,6 +1,8 @@
 {
   "name": "retro-search-2",
   "scripts": {
+    "build:client": "bun install && bun --filter './apps/client' build",
+    "deploy:api": "fly deploy -c apps/api/fly.toml --dockerfile apps/api/Dockerfile",
     "dev": "bun --elide-lines=0 --filter '*' dev",
     "dev:api": "bun --elide-lines=0 --filter './apps/api' dev",
     "dev:client": "bun --elide-lines=0 --filter './apps/client' dev",
