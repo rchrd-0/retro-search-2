@@ -2,11 +2,12 @@
   "name": "@retro-search-2/api",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "db:generate": "bun --bun prisma generate",
-    "db:migrate": "bun --bun prisma migrate dev",
+    "db:generate": "bunx prisma generate",
+    "db:migrate": "bunx prisma migrate dev",
+    "db:deploy": "bunx prisma migrate deploy",
     "db:seed": "bun run prisma/seed.ts",
-    "db:reset": "bun --bun prisma migrate reset",
-    "db:studio": "bun --bun prisma studio",
+    "db:reset": "bunx prisma migrate reset",
+    "db:studio": "bunx prisma studio",
     "check": "biome check src",
     "check:fix": "biome check --write src",
     "format": "biome format --write src"
