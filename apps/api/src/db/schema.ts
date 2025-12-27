@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { nanoid } from "nanoid";
 
@@ -56,7 +56,7 @@ export const scores = sqliteTable(
     scoreMs: integer("score_ms").notNull(),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .$defaultFn(() => new Date()),
   },
   (t) => ({
     levelIdScoreMsIdx: index("scores_level_id_score_ms_idx").on(t.levelId, t.scoreMs),
@@ -78,7 +78,9 @@ export const sessions = sqliteTable("sessions", {
   levelId: text("level_id")
     .notNull()
     .references(() => levels.id),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   used: integer("used", { mode: "boolean" }).notNull().default(false),
   completedAt: integer("completed_at", { mode: "timestamp" }),
@@ -105,7 +107,9 @@ export const foundCharacters = sqliteTable(
     characterId: text("character_id")
       .notNull()
       .references(() => characters.id),
-    foundAt: integer("found_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
+    foundAt: integer("found_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
   },
   (t) => ({
     uniqueSessionCharacter: uniqueIndex("found_characters_session_id_character_id_unique").on(
