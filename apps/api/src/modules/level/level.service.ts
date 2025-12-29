@@ -21,6 +21,28 @@ const loadCache = async () => {
   }
 };
 
+const saveProgressInBackground = async (
+  sessionId: string,
+  levelId: string,
+  characterId: string,
+) => {
+  try {
+    const isAlreadyFound = await levelRepo.findFoundCharacter(sessionId, characterId);
+    if (isAlreadyFound) return;
+
+    await levelRepo.markCharacterAsFound(sessionId, characterId);
+
+    const totalInLevel = levelCharacterCountCache?.get(levelId) || 0;
+    const foundCount = await levelRepo.countFoundCharactersInSession(sessionId);
+
+    if (totalInLevel === foundCount) {
+      await sessionService.finishSession(sessionId);
+    }
+  } catch (error) {
+    console.error("Background save failed:", error);
+  }
+};
+
 export const getAllLevels = async (): Promise<Level[]> => {
   return await levelRepo.findAll();
 };
@@ -66,27 +88,15 @@ export const verifyTarget = async (
     return { name: character.name, found: false };
   }
 
-  // 3. Only Validate Session & Duplicates if they actually clicked the right spot
-  const [, isAlreadyFound] = await Promise.all([
-    sessionService.getPlayableSession(sessionId, levelId),
-    levelRepo.findFoundCharacter(sessionId, characterId),
-  ]);
+  // 3. Security: Validate Session (Blocking)
+  // Ensure the user is actually allowed to play this level right now
+  await sessionService.getPlayableSession(sessionId, levelId);
 
-  if (isAlreadyFound) {
-    return { name: character.name, found: true };
-  }
+  // 4. Background Work (Fire & Forget)
+  // Check for victory and mark as found without blocking the UI response
+  saveProgressInBackground(sessionId, levelId, characterId);
 
-  // 4. Mark Found
-  await levelRepo.markCharacterAsFound(sessionId, characterId);
-
-  // 5. Check Victory Condition
-  const totalInLevel = levelCharacterCountCache.get(levelId) || 0;
-  const foundCount = await levelRepo.countFoundCharactersInSession(sessionId);
-
-  if (totalInLevel === foundCount) {
-    await sessionService.finishSession(sessionId);
-  }
-
+  // 5. Return success instantly
   return { name: character.name, found: true };
 };
 
