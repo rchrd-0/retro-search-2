@@ -10,5 +10,3 @@ export const handleValidationError = (error: unknown) => {
 
   throw error;
 };
-
-export const getImageUrl = (path: string) => `${import.meta.env.VITE_API_BASE_URL}${path}`;

@@ -1,3 +1,4 @@
+import env from "@/env";
 import { db } from "../index";
 import * as schema from "../schema";
 
@@ -16,7 +17,7 @@ async function main() {
     .insert(schema.levels)
     .values({
       name: "SNES",
-      imageUrl: "/public/images/levels/level-snes.png",
+      imageUrl: `${env.CDN_URL}/levels/level-snes.png`,
     })
     .returning();
 
@@ -25,35 +26,35 @@ async function main() {
       {
         levelId: snes.id,
         name: "Chrono",
-        imageUrl: "/public/images/chars/snes-chrono.png",
+        imageUrl: `${env.CDN_URL}/chars/snes-chrono.png`,
         xPct: 50.3,
         yPct: 64.5,
       },
       {
         levelId: snes.id,
         name: "Donkey Kong",
-        imageUrl: "/public/images/chars/snes-donkey-kong.png",
+        imageUrl: `${env.CDN_URL}/chars/snes-donkey-kong.png`,
         xPct: 21.2,
         yPct: 55.0,
       },
       {
         levelId: snes.id,
         name: "Ness",
-        imageUrl: "/public/images/chars/snes-ness.png",
+        imageUrl: `${env.CDN_URL}/chars/snes-ness.png`,
         xPct: 44.5,
         yPct: 50.3,
       },
       {
         levelId: snes.id,
         name: "Samus",
-        imageUrl: "/public/images/chars/snes-samus.png",
+        imageUrl: `${env.CDN_URL}/chars/snes-samus.png`,
         xPct: 56.2,
         yPct: 76.1,
       },
       {
         levelId: snes.id,
         name: "Link",
-        imageUrl: "/public/images/chars/snes-link.png",
+        imageUrl: `${env.CDN_URL}/chars/snes-link.png`,
         xPct: 75.6,
         yPct: 46.5,
       },
@@ -65,7 +66,7 @@ async function main() {
     .insert(schema.levels)
     .values({
       name: "Nintendo 64",
-      imageUrl: "/public/images/levels/level-n64.png",
+      imageUrl: `${env.CDN_URL}/levels/level-n64.png`,
     })
     .returning();
 
@@ -74,35 +75,35 @@ async function main() {
       {
         levelId: n64.id,
         name: "Fox McCloud",
-        imageUrl: "/public/images/chars/n64-fox.png",
+        imageUrl: `${env.CDN_URL}/chars/n64-fox.png`,
         xPct: 16.3,
         yPct: 41.9,
       },
       {
         levelId: n64.id,
         name: "Luigi",
-        imageUrl: "/public/images/chars/n64-luigi.png",
+        imageUrl: `${env.CDN_URL}/chars/n64-luigi.png`,
         xPct: 71.8,
         yPct: 48.1,
       },
       {
         levelId: n64.id,
         name: "Pete",
-        imageUrl: "/public/images/chars/n64-pete.png",
+        imageUrl: `${env.CDN_URL}/chars/n64-pete.png`,
         xPct: 56.9,
         yPct: 65.9,
       },
       {
         levelId: n64.id,
         name: "Captain Falcon",
-        imageUrl: "/public/images/chars/n64-falcon.png",
+        imageUrl: `${env.CDN_URL}/chars/n64-falcon.png`,
         xPct: 72.8,
         yPct: 74.3,
       },
       {
         levelId: n64.id,
         name: "Vela",
-        imageUrl: "/public/images/chars/n64-vela.png",
+        imageUrl: `${env.CDN_URL}/chars/n64-vela.png`,
         xPct: 23.0,
         yPct: 57.9,
       },
@@ -114,7 +115,7 @@ async function main() {
     .insert(schema.levels)
     .values({
       name: "PlayStation 1",
-      imageUrl: "/public/images/levels/level-ps1.png",
+      imageUrl: `${env.CDN_URL}/levels/level-ps1.png`,
     })
     .returning();
 
@@ -123,35 +124,35 @@ async function main() {
       {
         levelId: ps1.id,
         name: "Alucard",
-        imageUrl: "/public/images/chars/ps1-alucard.png",
+        imageUrl: `${env.CDN_URL}/chars/ps1-alucard.png`,
         xPct: 64.0,
         yPct: 76.1,
       },
       {
         levelId: ps1.id,
         name: "PaRappa",
-        imageUrl: "/public/images/chars/ps1-parappa.png",
+        imageUrl: `${env.CDN_URL}/chars/ps1-parappa.png`,
         xPct: 38.0,
         yPct: 77.9,
       },
       {
         levelId: ps1.id,
         name: "Solid Snake",
-        imageUrl: "/public/images/chars/ps1-snake.png",
+        imageUrl: `${env.CDN_URL}/chars/ps1-snake.png`,
         xPct: 74.1,
         yPct: 49.9,
       },
       {
         levelId: ps1.id,
         name: "Cloud Strife",
-        imageUrl: "/public/images/chars/ps1-cloud.png",
+        imageUrl: `${env.CDN_URL}/chars/ps1-cloud.png`,
         xPct: 16.9,
         yPct: 50.6,
       },
       {
         levelId: ps1.id,
         name: "Lara Croft",
-        imageUrl: "/public/images/chars/ps1-lara-croft.png",
+        imageUrl: `${env.CDN_URL}/chars/ps1-lara-croft.png`,
         xPct: 33.1,
         yPct: 54.2,
       },
@@ -163,7 +164,7 @@ async function main() {
     .insert(schema.levels)
     .values({
       name: "PlayStation 2",
-      imageUrl: "/public/images/levels/level-ps2.png",
+      imageUrl: `${env.CDN_URL}/levels/level-ps2.png`,
     })
     .returning();
 
@@ -172,35 +173,35 @@ async function main() {
       {
         levelId: ps2.id,
         name: "Dante",
-        imageUrl: "/public/images/chars/ps2-dante.png",
+        imageUrl: `${env.CDN_URL}/chars/ps2-dante.png`,
         xPct: 29.7,
         yPct: 68.7,
       },
       {
         levelId: ps2.id,
         name: "Amaterasu",
-        imageUrl: "/public/images/chars/ps2-okami.png",
+        imageUrl: `${env.CDN_URL}/chars/ps2-okami.png`,
         xPct: 35.9,
         yPct: 57.3,
       },
       {
         levelId: ps2.id,
         name: "Yuna",
-        imageUrl: "/public/images/chars/ps2-yuna.png",
+        imageUrl: `${env.CDN_URL}/chars/ps2-yuna.png`,
         xPct: 23.7,
         yPct: 44.4,
       },
       {
         levelId: ps2.id,
         name: "Ratchet",
-        imageUrl: "/public/images/chars/ps2-ratchet.png",
+        imageUrl: `${env.CDN_URL}/chars/ps2-ratchet.png`,
         xPct: 47.3,
         yPct: 65.4,
       },
       {
         levelId: ps2.id,
         name: "The Prince",
-        imageUrl: "/public/images/chars/ps2-prince.png",
+        imageUrl: `${env.CDN_URL}/chars/ps2-prince.png`,
         xPct: 77.8,
         yPct: 44.8,
       },
@@ -212,7 +213,7 @@ async function main() {
     .insert(schema.levels)
     .values({
       name: "Dreamcast",
-      imageUrl: "/public/images/levels/level-dreamcast.png",
+      imageUrl: `${env.CDN_URL}/levels/level-dreamcast.png`,
     })
     .returning();
 
@@ -221,35 +222,35 @@ async function main() {
       {
         levelId: dreamcast.id,
         name: "Sonic",
-        imageUrl: "/public/images/chars/dreamcast-sonic.png",
+        imageUrl: `${env.CDN_URL}/chars/dreamcast-sonic.png`,
         xPct: 27.8,
         yPct: 37.3,
       },
       {
         levelId: dreamcast.id,
         name: "Mew",
-        imageUrl: "/public/images/chars/dreamcast-mew.png",
+        imageUrl: `${env.CDN_URL}/chars/dreamcast-mew.png`,
         xPct: 65.4,
         yPct: 75.1,
       },
       {
         levelId: dreamcast.id,
         name: "Ryo Hazuki",
-        imageUrl: "/public/images/chars/dreamcast-ryo.png",
+        imageUrl: `${env.CDN_URL}/chars/dreamcast-ryo.png`,
         xPct: 46.4,
         yPct: 71.0,
       },
       {
         levelId: dreamcast.id,
         name: "Ulala",
-        imageUrl: "/public/images/chars/dreamcast-ulala.png",
+        imageUrl: `${env.CDN_URL}/chars/dreamcast-ulala.png`,
         xPct: 50.8,
         yPct: 84.1,
       },
       {
         levelId: dreamcast.id,
         name: "Edward Falcon",
-        imageUrl: "/public/images/chars/dreamcast-falcon.png",
+        imageUrl: `${env.CDN_URL}/chars/dreamcast-falcon.png`,
         xPct: 56.6,
         yPct: 56.4,
       },

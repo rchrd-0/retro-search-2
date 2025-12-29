@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "bunx --bun vite",
     "build": "tsc -b && bunx --bun vite build",
-    "check": "biome check src && tsc",
-    "check:fix": "biome check --write src && tsc",
+    "check": "biome check src && tsc -b",
+    "check:fix": "biome check --write src && tsc -b",
     "format": "biome format --write src",
     "preview": "bunx --bun vite preview"
   },

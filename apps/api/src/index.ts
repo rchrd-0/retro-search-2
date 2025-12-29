@@ -1,27 +1,37 @@
 import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
+import { compress } from "hono/compress";
 import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
+import { secureHeaders } from "hono/secure-headers";
 import env from "@/env";
 import { ValidationError } from "@/lib/errors";
 import level from "@/modules/level/level.routes";
 
-const app = new Hono();
+/**
+ * @TODO: prod hardening
+ *  - store images in cdn -> R2
+ *  - cold starts and availibility; increase min fly machine count; ping/pong health check
+ *  - secure headers
+ *  - json compression
+ *  - unit tests
+ *  - logging -> datadog, sentry, better stack
+ *  - graceful shutdown re database
+ */
 
-app.use("*", logger());
-
-app.use(
-  "*",
-  cors({
-    origin: env.FRONTEND_URL,
-    allowMethods: ["GET", "POST"],
-    allowHeaders: ["Content-Type", "Authorization", "X-SESSION-ID"],
-    credentials: true,
-  }),
-);
-
-app.use("/public/*", serveStatic({ root: "./" }));
+const app = new Hono()
+  .use("*", logger())
+  .use("*", secureHeaders())
+  .use("*", compress())
+  .use(
+    "*",
+    cors({
+      origin: env.FRONTEND_URL,
+      allowMethods: ["GET", "POST"],
+      allowHeaders: ["Content-Type", "Authorization", "X-SESSION-ID"],
+      credentials: true,
+    }),
+  );
 
 app.onError((err, c) => {
   if (err instanceof ValidationError) {
