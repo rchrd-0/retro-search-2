@@ -5,6 +5,22 @@ import * as levelRepo from "./level.repository";
 
 const TOLERANCE = 3.5;
 
+let charactersCache: Map<string, levelRepo.CharacterWithSecrets> | null = null;
+let levelCharacterCountCache: Map<string, number> | null = null;
+
+const loadCache = async () => {
+  if (charactersCache) return;
+
+  const allCharacters = await levelRepo.findAllCharacters();
+  charactersCache = new Map(allCharacters.map((character) => [character.id, character]));
+
+  levelCharacterCountCache = new Map();
+  for (const character of allCharacters) {
+    const current = levelCharacterCountCache.get(character.levelId) || 0;
+    levelCharacterCountCache.set(character.levelId, current + 1);
+  }
+};
+
 export const getAllLevels = async (): Promise<Level[]> => {
   return await levelRepo.findAll();
 };
@@ -29,35 +45,49 @@ export const verifyTarget = async (
   x: number,
   y: number,
 ) => {
-  await sessionService.getPlayableSession(sessionId, levelId);
+  await loadCache();
 
-  const character = await levelRepo.findCharacterById(characterId);
+  if (!charactersCache || !levelCharacterCountCache) {
+    throw new HTTPException(500, { message: "Internal server error" });
+  }
+
+  // 1. Memory Lookup
+  const character = charactersCache.get(characterId);
 
   if (!character || character.levelId !== levelId) {
     throw new HTTPException(404, { message: "Character not found in this level" });
   }
 
-  const isAlreadyFound = await levelRepo.findFoundCharacter(sessionId, characterId);
+  // 2. Optimistic Math Check (No DB)
+  const isWithinRange =
+    Math.abs(x - character.xPct) <= TOLERANCE && Math.abs(y - character.yPct) <= TOLERANCE;
+
+  if (!isWithinRange) {
+    return { name: character.name, found: false };
+  }
+
+  // 3. Only Validate Session & Duplicates if they actually clicked the right spot
+  const [, isAlreadyFound] = await Promise.all([
+    sessionService.getPlayableSession(sessionId, levelId),
+    levelRepo.findFoundCharacter(sessionId, characterId),
+  ]);
+
   if (isAlreadyFound) {
     return { name: character.name, found: true };
   }
 
-  const isWithinRange =
-    Math.abs(x - character.xPct) <= TOLERANCE && Math.abs(y - character.yPct) <= TOLERANCE;
-  if (isWithinRange) {
-    await levelRepo.markCharacterAsFound(sessionId, characterId);
+  // 4. Mark Found
+  await levelRepo.markCharacterAsFound(sessionId, characterId);
 
-    const [total, found] = await Promise.all([
-      levelRepo.countCharactersInLevel(levelId),
-      levelRepo.countFoundCharactersInSession(sessionId),
-    ]);
+  // 5. Check Victory Condition
+  const totalInLevel = levelCharacterCountCache.get(levelId) || 0;
+  const foundCount = await levelRepo.countFoundCharactersInSession(sessionId);
 
-    if (total === found) {
-      await sessionService.finishSession(sessionId);
-    }
+  if (totalInLevel === foundCount) {
+    await sessionService.finishSession(sessionId);
   }
 
-  return { name: character.name, found: isWithinRange };
+  return { name: character.name, found: true };
 };
 
 export const getLeaderboard = async (levelId: string) => {

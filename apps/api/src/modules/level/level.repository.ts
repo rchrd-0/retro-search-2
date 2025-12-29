@@ -40,6 +40,7 @@ export const findByIdWithCharacters = async (id: string): Promise<PublicLevel | 
   return result || null;
 };
 
+/** @deprecated */
 export const findCharacterById = async (id: string): Promise<CharacterWithSecrets | null> => {
   const result = await db.query.characters.findFirst({
     where: eq(characters.id, id),
@@ -53,6 +54,18 @@ export const findCharacterById = async (id: string): Promise<CharacterWithSecret
   });
 
   return result || null;
+};
+
+export const findAllCharacters = async (): Promise<CharacterWithSecrets[]> => {
+  return await db.query.characters.findMany({
+    columns: {
+      id: true,
+      name: true,
+      levelId: true,
+      xPct: true,
+      yPct: true,
+    },
+  });
 };
 
 export const findFoundCharacter = async (sessionId: string, characterId: string) => {
