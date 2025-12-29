@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
+import { rateLimiter } from "hono-rate-limiter";
 import { client } from "@/db";
 import env from "@/env";
 import { ValidationError } from "@/lib/errors";
@@ -20,6 +21,17 @@ const app = new Hono()
       allowMethods: ["GET", "POST"],
       allowHeaders: ["Content-Type", "Authorization", "X-SESSION-ID"],
       credentials: true,
+    }),
+  )
+  .use(
+    "*",
+    rateLimiter({
+      windowMs: 60 * 1000,
+      limit: 100,
+      standardHeaders: "draft-6",
+      keyGenerator: (c) => {
+        return c.req.header("fly-client-ip") || c.req.header("x-forwarded-for") || "unknown";
+      },
     }),
   );
 
