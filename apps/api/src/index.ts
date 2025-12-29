@@ -4,20 +4,10 @@ import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
+import { client } from "@/db";
 import env from "@/env";
 import { ValidationError } from "@/lib/errors";
 import level from "@/modules/level/level.routes";
-
-/**
- * @TODO: prod hardening
- *  - store images in cdn -> R2
- *  - cold starts and availibility; increase min fly machine count; ping/pong health check
- *  - secure headers
- *  - json compression
- *  - unit tests
- *  - logging -> datadog, sentry, better stack
- *  - graceful shutdown re database
- */
 
 const app = new Hono()
   .use("*", logger())
@@ -86,6 +76,15 @@ app.get("/", (c) => {
 });
 
 app.route("/level", level);
+
+const shutdown = () => {
+  console.log("Shutting down... Closing database connection.");
+  client.close();
+  process.exit(0);
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
 
 export default {
   port: env.PORT,
