@@ -27,8 +27,7 @@ const app = new Hono()
     "*",
     rateLimiter({
       windowMs: 60 * 1000,
-      limit: 100,
-      standardHeaders: "draft-6",
+      limit: 50,
       keyGenerator: (c) => {
         return c.req.header("fly-client-ip") || c.req.header("x-forwarded-for") || "unknown";
       },

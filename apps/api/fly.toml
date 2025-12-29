@@ -28,4 +28,4 @@ memory_mb = 512
 
 [env]
 PORT = "3000"
-CDN_URL = "https://assets.retro.mydomain.dev"
+CDN_URL = "https://assets.retro.rchrd.dev"
