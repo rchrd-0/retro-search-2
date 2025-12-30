@@ -3,8 +3,8 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "check": "biome check src",
-    "check:fix": "biome check --write src",
+    "check": "biome check src && tsc --noEmit",
+    "check:fix": "biome check --write src && tsc --noEmit",
     "format": "biome format --write src"
   },
   "dependencies": {

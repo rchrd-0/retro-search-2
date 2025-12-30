@@ -8,8 +8,8 @@
     "db:seed": "bun run src/db/seeds/index.ts",
     "db:reset": "bun run src/db/reset.ts && bun run db:migrate && bun run db:seed",
     "db:studio": "bun --bun drizzle-kit studio",
-    "check": "biome check src",
-    "check:fix": "biome check --write src",
+    "check": "biome check src && tsc --noEmit",
+    "check:fix": "biome check --write src && tsc --noEmit",
     "format": "biome format --write src"
   },
   "dependencies": {
