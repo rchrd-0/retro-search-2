@@ -88,9 +88,9 @@ app.get("/", (c) => {
 
 app.route("/level", level);
 
-const shutdown = () => {
+const shutdown = async () => {
   console.log("Shutting down... Closing database connection.");
-  client.close();
+  await client.end();
   process.exit(0);
 };
 

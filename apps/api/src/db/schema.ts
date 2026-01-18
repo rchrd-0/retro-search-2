@@ -1,8 +1,17 @@
 import { relations } from "drizzle-orm";
-import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import {
+  boolean,
+  doublePrecision,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 
-export const levels = sqliteTable("levels", {
+export const levels = pgTable("levels", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => nanoid()),
@@ -16,7 +25,7 @@ export const levelsRelations = relations(levels, ({ many }) => ({
   sessions: many(sessions),
 }));
 
-export const characters = sqliteTable(
+export const characters = pgTable(
   "characters",
   {
     id: text("id")
@@ -27,8 +36,9 @@ export const characters = sqliteTable(
       .references(() => levels.id),
     name: text("name").notNull(),
     imageUrl: text("image_url").notNull(),
-    xPct: real("x_pct").notNull(),
-    yPct: real("y_pct").notNull(),
+    // Postgres uses doublePrecision for floating point numbers
+    xPct: doublePrecision("x_pct").notNull(),
+    yPct: doublePrecision("y_pct").notNull(),
   },
   (t) => ({
     levelIdIdx: index("characters_level_id_idx").on(t.levelId),
@@ -43,7 +53,7 @@ export const charactersRelations = relations(characters, ({ one, many }) => ({
   foundCharacters: many(foundCharacters),
 }));
 
-export const scores = sqliteTable(
+export const scores = pgTable(
   "scores",
   {
     id: text("id")
@@ -54,9 +64,8 @@ export const scores = sqliteTable(
       .references(() => levels.id),
     username: text("username").notNull(),
     scoreMs: integer("score_ms").notNull(),
-    createdAt: integer("created_at", { mode: "timestamp" })
-      .notNull()
-      .$defaultFn(() => new Date()),
+    // Postgres has a native timestamp type
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
     levelIdScoreMsIdx: index("scores_level_id_score_ms_idx").on(t.levelId, t.scoreMs),
@@ -71,19 +80,18 @@ export const scoresRelations = relations(scores, ({ one }) => ({
   }),
 }));
 
-export const sessions = sqliteTable("sessions", {
+export const sessions = pgTable("sessions", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => nanoid()),
   levelId: text("level_id")
     .notNull()
     .references(() => levels.id),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-  used: integer("used", { mode: "boolean" }).notNull().default(false),
-  completedAt: integer("completed_at", { mode: "timestamp" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  // Postgres has a native boolean type
+  used: boolean("used").notNull().default(false),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
   timeMs: integer("time_ms"),
 });
 
@@ -95,7 +103,7 @@ export const sessionsRelations = relations(sessions, ({ one, many }) => ({
   foundCharacters: many(foundCharacters),
 }));
 
-export const foundCharacters = sqliteTable(
+export const foundCharacters = pgTable(
   "found_characters",
   {
     id: text("id")
@@ -107,9 +115,7 @@ export const foundCharacters = sqliteTable(
     characterId: text("character_id")
       .notNull()
       .references(() => characters.id),
-    foundAt: integer("found_at", { mode: "timestamp" })
-      .notNull()
-      .$defaultFn(() => new Date()),
+    foundAt: timestamp("found_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
     uniqueSessionCharacter: uniqueIndex("found_characters_session_id_character_id_unique").on(

@@ -5,10 +5,11 @@ import * as schema from "../schema";
 async function main() {
   console.log("Seeding database...");
 
-  // Clear existing data
-  await db.delete(schema.scores);
+  // Clear existing data in correct order (respecting foreign key constraints)
+  // Delete child tables first, then parent tables
   await db.delete(schema.foundCharacters);
   await db.delete(schema.sessions);
+  await db.delete(schema.scores);
   await db.delete(schema.characters);
   await db.delete(schema.levels);
 
