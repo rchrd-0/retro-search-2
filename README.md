@@ -8,7 +8,7 @@ A "Where's Waldo" style hidden object game built with a modern web stack. Player
 - **Monorepo**: Bun Workspaces
 - **Frontend**: React (with React Compiler), Vite, TailwindCSS, Shadcn UI, TanStack Query
 - **Backend**: Hono
-- **Database**: Turso (LibSQL) / SQLite with Drizzle ORM
+- **Database**: PostgreSQL ([Neon](https://neon.tech)) with Drizzle ORM
 - **Validation**: Valibot
 - **Linting/Formatting**: Biome
 
@@ -23,6 +23,7 @@ A "Where's Waldo" style hidden object game built with a modern web stack. Player
 ### Prerequisites
 
 - [Bun](https://bun.com) (v1.3.3 or later)
+- [Docker](https://docker.com) (for local PostgreSQL)
 
 ### Installation
 
@@ -37,9 +38,14 @@ A "Where's Waldo" style hidden object game built with a modern web stack. Player
    bun install
    ```
 
-3. Set up the database:
+3. Start the local database:
    ```bash
    cd apps/api
+   docker compose up -d
+   ```
+
+4. Set up the database:
+   ```bash
    bun run db:migrate
    bun run db:seed
    ```
@@ -60,3 +66,12 @@ bun run dev
 - `bun run dev`: Start development servers for all apps
 - `bun run check`: Run type checking and linting
 - `bun run format`: Format code using Biome
+
+## Credits
+
+*Console explosion* art and illustrations by **Pierre Roussel**.  
+Non-commercial and educational rights and permissions generously provided by courtesy of Pierre — thank you! 🙇
+
+- 🛒 Buy prints on [Etsy](https://angerinet.etsy.com)
+- 📷 Instagram: [@_itspear](https://instagram.com/_itspear)
+- 🎨 ArtStation: [Pierre Roussel](https://www.artstation.com/pierreroussel)
