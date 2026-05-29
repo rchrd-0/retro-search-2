@@ -81,7 +81,13 @@ const Game = ({ levelId, onViewLeaderboard, onBackToMenu }: GameProps) => {
     resetClickState();
   };
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="relative">

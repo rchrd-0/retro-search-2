@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Leaderboard from "@/components/Leaderboard";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useGetAllLevels } from "@/hooks/query/useGetAllLevels";
 
@@ -17,41 +16,33 @@ const LeaderboardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-64 items-center justify-center">
         <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto max-w-4xl p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-center font-bold text-2xl">Leaderboards</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-wrap justify-center gap-2">
-              {levels?.map((level) => (
-                <Button
-                  key={level.id}
-                  variant={selectedLevelId === level.id ? "default" : "outline"}
-                  className={selectedLevelId === level.id ? "border border-transparent" : ""}
-                  onClick={() => setSelectedLevelId(level.id)}
-                >
-                  {level.name}
-                </Button>
-              ))}
-            </div>
+    <div className="mx-auto max-w-3xl space-y-8">
+      <div className="space-y-1">
+        <h2 className="font-bold text-2xl tracking-tight">Leaderboards</h2>
+        <p className="text-muted-foreground text-sm">Top times for each level</p>
+      </div>
 
-            {selectedLevelId && (
-              <div className="mt-4">
-                <Leaderboard levelId={selectedLevelId} />
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex flex-wrap gap-2">
+        {levels?.map((level) => (
+          <Button
+            key={level.id}
+            variant={selectedLevelId === level.id ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSelectedLevelId(level.id)}
+          >
+            {level.name}
+          </Button>
+        ))}
+      </div>
+
+      {selectedLevelId && <Leaderboard levelId={selectedLevelId} />}
     </div>
   );
 };

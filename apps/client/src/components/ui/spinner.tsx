@@ -1,15 +1,21 @@
-import { Loader2Icon } from "lucide-react";
-
 import { cn } from "@/utils/tailwind";
 
-function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
+function Spinner({ className, ...props }: React.ComponentProps<"span">) {
   return (
-    <Loader2Icon
-      role="status"
+    <span
       aria-label="Loading"
-      className={cn("size-4 animate-spin", className)}
+      aria-live="polite"
+      className={cn("inline-flex items-center gap-1", className)}
       {...props}
-    />
+    >
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="size-2 rounded-full bg-primary"
+          style={{ animation: `dot-pulse 1.4s ease-in-out ${i * 220}ms infinite` }}
+        />
+      ))}
+    </span>
   );
 }
 

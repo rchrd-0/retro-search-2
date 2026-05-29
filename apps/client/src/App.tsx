@@ -1,3 +1,4 @@
+import { ChevronLeft, Trophy } from "lucide-react";
 import { useEffect, useReducer } from "react";
 import Game from "@/components/Game";
 import LeaderboardPage from "@/components/LeaderboardPage";
@@ -55,19 +56,16 @@ function App() {
 
   const resetToMainMenu = () => {
     setPageState({ type: "RESET" });
-
     window.history.pushState({ view: "select" }, "");
   };
 
   const startGame = (levelId: string) => {
     setPageState({ type: "START_GAME", levelId });
-
     window.history.pushState({ view: "game", levelId }, "");
   };
 
   const viewLeaderboard = (replace = false) => {
     setPageState({ type: "VIEW_LEADERBOARD" });
-
     if (replace) {
       window.history.replaceState({ view: "leaderboard" }, "");
     } else {
@@ -78,20 +76,38 @@ function App() {
   return (
     <Layout>
       {currentView !== "select" && (
-        <Button variant={"outline"} onClick={resetToMainMenu}>
-          Back
-        </Button>
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={resetToMainMenu}
+            className="gap-1.5 text-muted-foreground hover:text-foreground"
+          >
+            <ChevronLeft className="size-4" />
+            Back
+          </Button>
+        </div>
       )}
 
       {currentView === "select" && (
-        <>
-          <div className="mb-8 flex justify-center">
-            <Button size="lg" onClick={() => viewLeaderboard()}>
+        <div className="space-y-10">
+          <div className="space-y-3 pt-4">
+            <h1 className="font-bold text-4xl tracking-tight">Find them all.</h1>
+            <p className="max-w-md text-muted-foreground">
+              Pick a level and race the clock — spot every hidden character as fast as you can.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => viewLeaderboard()}
+              className="mt-2 gap-2"
+            >
+              <Trophy className="size-4 text-primary" />
               View Leaderboards
             </Button>
           </div>
           <LevelSelect handleSelectLevel={startGame} />
-        </>
+        </div>
       )}
 
       {currentView === "game" && selectedLevel && (

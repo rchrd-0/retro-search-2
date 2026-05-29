@@ -10,6 +10,8 @@ import {
 import { useGetLeaderboard } from "@/hooks/query/useGetLeaderboard";
 import { formatTime } from "@/utils/format";
 
+const MEDALS = ["🥇", "🥈", "🥉"];
+
 interface LeaderboardProps {
   levelId: string;
 }
@@ -26,30 +28,47 @@ const Leaderboard = ({ levelId }: LeaderboardProps) => {
   }
 
   return (
-    <div className="rounded-md border">
+    <div className="overflow-hidden rounded-lg border border-border">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-25">Rank</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Time</TableHead>
-            <TableHead className="text-right">Date</TableHead>
+          <TableRow className="border-border hover:bg-transparent">
+            <TableHead className="w-16 font-medium text-muted-foreground">Rank</TableHead>
+            <TableHead className="font-medium text-muted-foreground">Player</TableHead>
+            <TableHead className="font-medium text-muted-foreground">Time</TableHead>
+            <TableHead className="text-right font-medium text-muted-foreground">Date</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {scores?.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} className="h-24 text-center">
+              <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
                 No scores yet. Be the first!
               </TableCell>
             </TableRow>
           ) : (
             scores?.map((score, index) => (
-              <TableRow key={`${score.username}-${score.createdAt}`}>
-                <TableCell className="font-medium">{index + 1}</TableCell>
-                <TableCell>{score.username}</TableCell>
-                <TableCell>{formatTime(score.scoreMs)}</TableCell>
-                <TableCell className="text-right">
+              <TableRow
+                key={`${score.username}-${score.createdAt}`}
+                className="border-border/50 transition-colors hover:bg-muted/30"
+              >
+                <TableCell className="font-mono text-sm">
+                  {index < 3 ? (
+                    <span className="text-base leading-none">{MEDALS[index]}</span>
+                  ) : (
+                    <span className="text-muted-foreground">{index + 1}</span>
+                  )}
+                </TableCell>
+                <TableCell className="font-medium font-mono text-foreground tracking-widest">
+                  {score.username}
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={`font-mono text-sm tabular-nums ${index === 0 ? "font-semibold text-primary" : "text-foreground"}`}
+                  >
+                    {formatTime(score.scoreMs)}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right text-muted-foreground text-sm">
                   {new Date(score.createdAt).toLocaleDateString()}
                 </TableCell>
               </TableRow>
