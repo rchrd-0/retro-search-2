@@ -2,6 +2,8 @@
   "name": "@retro-search-2/api",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
     "db:generate": "bun --bun drizzle-kit generate",
     "db:migrate": "bun --bun drizzle-kit migrate",
     "db:migrate:prod": "bun --env-file=.env.prod db:migrate",
